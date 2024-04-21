@@ -5,16 +5,20 @@ namespace InoTec
 {
     public class BcsBatStatusInfo
     {
-        private BatInfo _bcsInfo;
-        private IEnumerable<BatStatus> _bcsStatus;
+        private BatInfo _bcsBatInfo;
+        private IEnumerable<BatStatus> _bcsBatStatus;
 
-        public BatInfo BcsBatInfo => _bcsInfo;
-        public IEnumerable<BatStatus> BcsBatStatus => _bcsStatus;
+        public BatInfo BcsBatInfo => _bcsBatInfo;
+        public IEnumerable<BatStatus> BcsBatStatus
+        {
+            get => _bcsBatStatus;
+            set => _bcsBatStatus = value;
+        }
 
         public BcsBatStatusInfo(BatInfo bcsInfo, IEnumerable<BatStatus> bcsStatus)
         {
-            _bcsInfo = bcsInfo;
-            _bcsStatus = bcsStatus;
+            _bcsBatInfo = bcsInfo;
+            _bcsBatStatus = bcsStatus;
         }
     }
 }
