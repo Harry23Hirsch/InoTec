@@ -20,5 +20,32 @@ namespace InoTec
             _bcsBatInfo = bcsInfo;
             _bcsBatStatus = bcsStatus;
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+                return false;
+
+            if (obj.GetType() != GetType())
+                return false;
+
+
+            return Equals((BcsBatStatusInfo)obj);
+        }
+        public bool Equals(BcsBatStatusInfo obj)
+        {
+            if (_bcsBatInfo == null ||
+                obj.BcsBatInfo == null)
+                return false;
+
+            if(_bcsBatInfo.N == obj.BcsBatInfo.N)
+                return true;
+
+            return false;
+        }
+        public override int GetHashCode() 
+        {
+            return base.GetHashCode();
+        }
     }
 }
