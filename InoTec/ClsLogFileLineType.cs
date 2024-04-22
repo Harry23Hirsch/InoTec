@@ -2,7 +2,7 @@
 
 namespace InoTec
 {
-    public class ClsLogFileLine
+    public class ClsLogFileLineType
     {
         private DateTime _datum;
         private string _text;
@@ -18,7 +18,7 @@ namespace InoTec
         public string Time => _time;
         public string Text => _text;
 
-        public ClsLogFileLine(string year, string month, string day, string time, string text)
+        public ClsLogFileLineType(string year, string month, string day, string time, string text)
         {
             _year = year;
             _month = month;

@@ -3,19 +3,19 @@ using System.Collections.Generic;
 
 namespace InoTec
 {
-    public class BcsBatStatusInfo
+    public class BcsBatStatusInfoType
     {
         private BatInfo _bcsBatInfo;
-        private IEnumerable<BatStatus> _bcsBatStatus;
+        private IEnumerable<BatStatusType> _bcsBatStatus;
 
         public BatInfo BcsBatInfo => _bcsBatInfo;
-        public IEnumerable<BatStatus> BcsBatStatus
+        public IEnumerable<BatStatusType> BcsBatStatus
         {
             get => _bcsBatStatus;
             set => _bcsBatStatus = value;
         }
 
-        public BcsBatStatusInfo(BatInfo bcsInfo, IEnumerable<BatStatus> bcsStatus)
+        public BcsBatStatusInfoType(BatInfo bcsInfo, IEnumerable<BatStatusType> bcsStatus)
         {
             _bcsBatInfo = bcsInfo;
             _bcsBatStatus = bcsStatus;
@@ -30,9 +30,9 @@ namespace InoTec
                 return false;
 
 
-            return Equals((BcsBatStatusInfo)obj);
+            return Equals((BcsBatStatusInfoType)obj);
         }
-        public bool Equals(BcsBatStatusInfo obj)
+        public bool Equals(BcsBatStatusInfoType obj)
         {
             if (_bcsBatInfo == null ||
                 obj.BcsBatInfo == null)

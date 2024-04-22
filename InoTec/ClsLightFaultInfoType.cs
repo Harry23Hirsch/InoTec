@@ -1,6 +1,6 @@
 ﻿namespace InoTec
 {
-    public class ClsLightFaultInfo
+    public class ClsLightFaultInfoType
     {
         private int _cls;
         private int _slot;
@@ -12,7 +12,7 @@
         public int Adr => _adr;
         public string Text => _text;
 
-        public ClsLightFaultInfo(int cls, int slt, int adr, string text)
+        public ClsLightFaultInfoType(int cls, int slt, int adr, string text)
         {
             _cls = cls;
             _slot = slt;

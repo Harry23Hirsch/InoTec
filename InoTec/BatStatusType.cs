@@ -41,7 +41,7 @@ namespace InoTec
         public int O { get; set; }
         public List<int> D { get; set; }
     }
-    public class BatStatus
+    public class BatStatusType
     {
         public long N { get; set; }
         public Bat_U U { get; set; }

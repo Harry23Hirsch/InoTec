@@ -87,12 +87,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClsFaultInfo.cs" />
+    <Compile Include="ClsFaultInfoType.cs" />
     <Compile Include="ClsFileHandler.cs" />
-    <Compile Include="BatStatus.cs" />
-    <Compile Include="BcsBatStatusInfo.cs" />
-    <Compile Include="ClsLogFileLine.cs" />
-    <Compile Include="ClsLightFaultInfo.cs" />
+    <Compile Include="BatStatusType.cs" />
+    <Compile Include="BcsBatStatusInfoType.cs" />
+    <Compile Include="ClsLogFileLineType.cs" />
+    <Compile Include="ClsLightFaultInfoType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

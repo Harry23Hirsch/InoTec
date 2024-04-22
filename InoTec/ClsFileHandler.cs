@@ -21,7 +21,7 @@ namespace InoTec
             _projectPath = projectPath;
         }
 
-        public IEnumerable<IEnumerable<ClsLogFileLine>> GetClsLogFiles()
+        public IEnumerable<IEnumerable<ClsLogFileLineType>> GetClsLogFiles()
         {
             if (string.IsNullOrEmpty(_projectPath))
                 throw new ArgumentNullException(nameof(_projectPath));
@@ -30,7 +30,7 @@ namespace InoTec
                 throw new DirectoryNotFoundException(nameof(_projectPath));
 
             var logFiles = Directory.GetFiles(_projectPath, "*.LOG");
-            var result = new List<IEnumerable<ClsLogFileLine>>();
+            var result = new List<IEnumerable<ClsLogFileLineType>>();
 
             foreach (string logFile in logFiles)
             {
@@ -48,9 +48,9 @@ namespace InoTec
             return result;
         }
 
-        public IEnumerable<ClsLogFileLine> GetClsLogLineInfo(IEnumerable<string> lines)
+        public IEnumerable<ClsLogFileLineType> GetClsLogLineInfo(IEnumerable<string> lines)
         {
-            var result = new List<ClsLogFileLine>();
+            var result = new List<ClsLogFileLineType>();
 
             var logLines = lines.ToList();
 
@@ -86,7 +86,7 @@ namespace InoTec
                 var day = dateRaw[0];
                 var time = dateRaw[1].Trim();
 
-                result.Add(new ClsLogFileLine(
+                result.Add(new ClsLogFileLineType(
                     year,
                     month,
                     day,
@@ -97,7 +97,7 @@ namespace InoTec
             return result;
         }
 
-        public IEnumerable<BcsBatStatusInfo> GetBtLogFiles()
+        public IEnumerable<BcsBatStatusInfoType> GetBtLogFiles()
         {
             if (string.IsNullOrEmpty(_projectPath))
                 throw new ArgumentNullException(nameof(_projectPath));
@@ -108,7 +108,7 @@ namespace InoTec
                 throw new DirectoryNotFoundException();
 
             var btLogFiles = Directory.GetFiles(btPath, "*.LOG");
-            var btLogResult = new List<BcsBatStatusInfo>();
+            var btLogResult = new List<BcsBatStatusInfoType>();
 
             foreach (string logFile in btLogFiles)
             {
@@ -119,14 +119,14 @@ namespace InoTec
 
 
                 var bcsInfo = DeserializeBcsBat<BatInfo>(lines[0]);
-                var btLogLines = new List<BatStatus>();
+                var btLogLines = new List<BatStatusType>();
 
                 for (int i = 1; i < lines.Count; i++)
                 {
-                    btLogLines.Add(DeserializeBcsBat<BatStatus>(lines[i]));
+                    btLogLines.Add(DeserializeBcsBat<BatStatusType>(lines[i]));
                 }
 
-                btLogResult.Add(new BcsBatStatusInfo(bcsInfo, btLogLines));
+                btLogResult.Add(new BcsBatStatusInfoType(bcsInfo, btLogLines));
             }
 
             return btLogResult;
@@ -143,7 +143,7 @@ namespace InoTec
             return JsonSerializer.Deserialize<T>(json, serializeOptions);
         }
 
-        public IEnumerable<ClsFaultInfo> GetClsFaultInfos()
+        public IEnumerable<ClsFaultInfoType> GetClsFaultInfos()
         {
             if (string.IsNullOrEmpty(_projectPath))
                 throw new ArgumentNullException(nameof(_projectPath));
@@ -154,7 +154,7 @@ namespace InoTec
             var files = Directory.GetFiles(_projectPath, "*.txt");
             var clsFiles = GetClsFaultInfoFiles(files);
 
-            var clsFaultResult = new List<ClsFaultInfo>();
+            var clsFaultResult = new List<ClsFaultInfoType>();
             foreach (string clsFile in clsFiles)
             {
                 var cls = ParseClsFaultInfoFile(clsFile);
@@ -185,7 +185,7 @@ namespace InoTec
             return clsFiles;
         }
 
-        public ClsFaultInfo ParseClsFaultInfoFile(string fileName)
+        public ClsFaultInfoType ParseClsFaultInfoFile(string fileName)
         {
             if (!File.Exists(fileName))
                 throw new FileNotFoundException(nameof(fileName));
@@ -204,7 +204,7 @@ namespace InoTec
             i++;
 
             var stromkreise = lines[i+1];
-            var leuchtenInfo = new List<ClsLightFaultInfo>();
+            var leuchtenInfo = new List<ClsLightFaultInfoType>();
 
             if (!stromkreise.Equals("Keine Fehler"))
             {
@@ -268,10 +268,10 @@ namespace InoTec
                 i += 2;
             }
 
-            return new ClsFaultInfo(geraeteInfo, leuchtenInfo, batterieInfo, externeInfo);
+            return new ClsFaultInfoType(geraeteInfo, leuchtenInfo, batterieInfo, externeInfo);
         }
 
-        public ClsLightFaultInfo ParseClsLightFault(string line)
+        public ClsLightFaultInfoType ParseClsLightFault(string line)
         {
             if (string.IsNullOrEmpty(line)) 
                 return null;
@@ -287,7 +287,7 @@ namespace InoTec
             var adr = sLine[3];
             var text = sLine[0];
 
-            return new ClsLightFaultInfo(int.Parse(cls), int.Parse(slot), int.Parse(adr), text);
+            return new ClsLightFaultInfoType(int.Parse(cls), int.Parse(slot), int.Parse(adr), text);
         }
     }
 }
