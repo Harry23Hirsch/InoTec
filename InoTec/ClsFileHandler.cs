@@ -13,14 +13,25 @@ namespace InoTec
         public ClsFileHandler(string projectPath)
         {
             if (string.IsNullOrEmpty(projectPath))
-                throw new ArgumentNullException(nameof(_projectPath));
+                throw new ArgumentNullException(nameof(projectPath));
 
             if (!Directory.Exists(projectPath))
-                throw new DirectoryNotFoundException(nameof(_projectPath));
+                throw new DirectoryNotFoundException(nameof(projectPath));
 
             _projectPath = projectPath;
         }
 
+        /// <summary>
+        /// Get LogFiles
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="DirectoryNotFoundException"></exception>
+        /// <exception cref="IOException"></exception>
+        /// <exception cref="UnauthorizedAccessException"></exception>
+        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="PathTooLongException"></exception>
         public IEnumerable<IEnumerable<ClsLogFileLineType>> GetClsLogFiles()
         {
             if (string.IsNullOrEmpty(_projectPath))
@@ -37,7 +48,15 @@ namespace InoTec
                 if (!File.Exists(logFile))
                     continue;
 
-                var lineInfo = GetClsLogLineInfo(File.ReadLines(logFile));
+                List<ClsLogFileLineType> lineInfo;
+                try
+                {
+                    lineInfo = GetClsLogLineInfo(File.ReadLines(logFile)).ToList();
+                }
+                catch (FormatException)
+                {
+                    continue; ;
+                }
 
                 if (lineInfo is null)
                     continue;
@@ -48,6 +67,12 @@ namespace InoTec
             return result;
         }
 
+        /// <summary>
+        /// Gets Lines from LogFile
+        /// </summary>
+        /// <param name="lines"></param>
+        /// <returns>IEnumerable of ClsLogFileLineType</returns>
+        /// <exception cref="FormatException"></exception>
         public IEnumerable<ClsLogFileLineType> GetClsLogLineInfo(IEnumerable<string> lines)
         {
             var result = new List<ClsLogFileLineType>();
@@ -97,6 +122,18 @@ namespace InoTec
             return result;
         }
 
+        /// <summary>
+        /// Gets BCS LogFiles
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="DirectoryNotFoundException"></exception>
+        /// <exception cref="IOException"></exception>
+        /// <exception cref="UnauthorizedAccessException"></exception>
+        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="PathTooLongException"></exception>
+        /// <exception cref="JsonException"></exception>
+        /// <exception cref="NotSupportedException"></exception>
         public IEnumerable<BcsBatStatusInfoType> GetBtLogFiles()
         {
             if (string.IsNullOrEmpty(_projectPath))
@@ -115,8 +152,15 @@ namespace InoTec
                 if (!File.Exists(logFile))
                     continue;
 
-                var lines = File.ReadLines(logFile).ToList();
-
+                List<string> lines;
+                try
+                {
+                    lines = File.ReadLines(logFile).ToList();
+                }
+                catch 
+                {
+                    continue;
+                }
 
                 var bcsInfo = DeserializeBcsBat<BatInfo>(lines[0]);
                 var btLogLines = new List<BatStatusType>();
@@ -132,6 +176,15 @@ namespace InoTec
             return btLogResult;
         }
 
+        /// <summary>
+        /// Deserialize Generic Json
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="json"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="JsonException"></exception>
+        /// <exception cref="NotSupportedException"></exception>
         public T DeserializeBcsBat<T>(string json)
         {
             var serializeOptions = new JsonSerializerOptions
@@ -143,6 +196,18 @@ namespace InoTec
             return JsonSerializer.Deserialize<T>(json, serializeOptions);
         }
 
+        /// <summary>
+        /// Gets CLS Fusion LogFiles
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="DirectoryNotFoundException"></exception>
+        /// <exception cref="IOException"></exception>
+        /// <exception cref="UnauthorizedAccessException"></exception>
+        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="PathTooLongException"></exception>
+        /// <exception cref="System.Security.SecurityException"></exception>
+        /// <exception cref="FileNotFoundException"></exception>
         public IEnumerable<ClsFaultInfoType> GetClsFaultInfos()
         {
             if (string.IsNullOrEmpty(_projectPath))
@@ -169,6 +234,12 @@ namespace InoTec
             return clsFaultResult;
         }
 
+        /// <summary>
+        /// Gets CLS Fusion Fault Logs
+        /// </summary>
+        /// <param name="files"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
         public IEnumerable<string> GetClsFaultInfoFiles(string[] files)
         {
             var clsFiles = new List<string>();
@@ -185,6 +256,20 @@ namespace InoTec
             return clsFiles;
         }
 
+        /// <summary>
+        /// Parse CLS Fusion Fault File
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        /// <exception cref="FileNotFoundException"></exception>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="DirectoryNotFoundException"></exception>
+        /// <exception cref="IOException"></exception>
+        /// <exception cref="UnauthorizedAccessException"></exception>
+        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="PathTooLongException"></exception>
+        /// <exception cref="System.Security.SecurityException"></exception>
         public ClsFaultInfoType ParseClsFaultInfoFile(string fileName)
         {
             if (!File.Exists(fileName))
@@ -271,6 +356,11 @@ namespace InoTec
             return new ClsFaultInfoType(geraeteInfo, leuchtenInfo, batterieInfo, externeInfo);
         }
 
+        /// <summary>
+        /// Parse CLS Fusion Ligth Fault 
+        /// </summary>
+        /// <param name="line"></param>
+        /// <returns></returns>
         public ClsLightFaultInfoType ParseClsLightFault(string line)
         {
             if (string.IsNullOrEmpty(line)) 
